@@ -2,6 +2,8 @@
 import platform
 import os
 import subprocess
+import re
+import netifaces as ni
 
 # method 1:
 # os.system("ping -c 1 -w 2 8.8.8.8")
@@ -27,7 +29,9 @@ def ping_host(ip):
     exit_code = os.system(ping_cmd)
     return exit_code
 
-ip_prefix = "140.161.89."
+ip_prefix = ni.ifaddresses('enp0s3')[ni.AF_INET][0]['addr']
+ip_prefix = re.sub(r"\.[^.]+$", "",ip_prefix) + "."
+
 
 for final_octet in range(254):
     ip = ip_prefix + str(final_octet + 1)
